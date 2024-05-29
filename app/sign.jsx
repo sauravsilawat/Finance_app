@@ -47,7 +47,6 @@ export default function App() {
     return (
         <SafeAreaView className="bg-white h-full">
             <ScrollView contentContainerStyle={{ height: '100%' }}>
-                {/* <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }} className="w-full justify-center items-center h-full px-4"> */}
                 <Animated.View style={{ opacity: fadeAnim }} className="w-full justify-center items-center h-full px-4">
                     <Animated.Image
                         style={{ transform: [{ translateY: translateTAnim }] }}
@@ -77,8 +76,8 @@ export default function App() {
                     </Animated.View>
 
                     <Animated.View style={{ transform: [{ translateY: translateBAnim }]}}>
-                        <Text className="text-xs m-auto mt-4 font-rreg text-[#4D4D4D]">Don’t have an account? <Text className="underline font-rbold">Sign in</Text></Text>
-                        <Text className="px-6 text-center mt-[30px] text-xs font-rreg text-[#4D4D4D]">By creating an account, or signing in, you are agreeing to our <Text className="underline font-rbold">Terms of Service</Text> and <Text className="underline font-rbold">Privacy Policy.</Text></Text>
+                        <Text className="text-[12px] m-auto mt-4 font-rreg text-[#4D4D4D]">Don’t have an account? <Text className="underline font-rbold">Sign in</Text></Text>
+                        <Text className="px-6 text-center mt-[30px] text-[11px] font-rreg text-[#4D4D4D]">By creating an account, or signing in, you are agreeing to our <Text className="underline font-rbold">Terms of Service</Text> and <Text className="underline font-rbold">Privacy Policy.</Text></Text>
                     </Animated.View>
                 </Animated.View>
             </ScrollView>

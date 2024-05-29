@@ -1,4 +1,4 @@
-import { View, Image, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Image, Text, FlatList, Animated, Easing, TouchableOpacity, ScrollView } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 
 import back from "../../assets/icon/back.png"
@@ -17,7 +17,7 @@ import option2 from "../../assets/icon/option2.png"
 import slip from "../../assets/icon/slip.png"
 
 import data from '../../assets/constant/featuredetail'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CustomButton from '../../components/CustomButton'
 
 const ListingDetail = () => {
@@ -33,6 +33,58 @@ const ListingDetail = () => {
             setJoin(false);
         }
     }, [model])
+
+    const animatedHeight1 = useRef(new Animated.Value(0)).current;
+    const animatedHeight2 = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        if (option) {
+            Animated.timing(animatedHeight1, {
+                toValue: 1,
+                duration: 300,
+                easing: Easing.linear,
+                useNativeDriver: false
+            }).start();
+        } else {
+            Animated.timing(animatedHeight1, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.linear,
+                useNativeDriver: false
+            }).start();
+        }
+    }, [option]);
+    
+    useEffect(() => {
+        if (model) {
+            Animated.timing(animatedHeight2, {
+                toValue: 1,
+                duration: 300,
+                easing: Easing.linear,
+                useNativeDriver: false
+            }).start();
+        } else {
+            Animated.timing(animatedHeight2, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.linear,
+                useNativeDriver: false
+            }).start();
+        }
+    }, [model]);
+
+    const maxHeight = 210; 
+    const maxHeight2 = 400; 
+
+    const heightInterpolate1 = animatedHeight1.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, maxHeight]
+    });
+    const heightInterpolate2 = animatedHeight2.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, maxHeight2]
+    });
+
 
     return (
         <ScrollView>
@@ -61,17 +113,17 @@ const ListingDetail = () => {
                 <View>
                     <Image className="relative w-full h-[280px]" resizeMode='fit' source={listingdata.img}></Image>
                     <View className="absolute bottom-10 left-10">
-                        <Text className="text-white font-playItalic text-4xl">{listingdata.title}</Text>
-                        <Text className="text-white font-playRegular ml-6 text-3xl">{listingdata.loc}</Text>
+                        <Text className="text-white font-playItalic text-3xl">{listingdata.title}</Text>
+                        <Text className="text-white font-playRegular ml-6 text-2xl">{listingdata.loc}</Text>
                     </View>
                 </View>
 
                 <View className="px-8 mt-8 border-b-gray-200 border-b-[6px]">
-                    <Text className=" font-playRegular text-xl ">First Floor Apartment in <Text>{listingdata.title}</Text></Text>
-                    <Text className=" font-playRegular text-[12px] text-gray-500">
+                    <Text className=" font-playRegular text-base mb-1 ">First Floor Apartment in <Text>{listingdata.title}</Text></Text>
+                    <Text className=" font-playRegular text-[10px] text-gray-500">
                         This exquisite first-floor apartment is perched on a 515 sqm (617 sq. yds.) plot; the largest plot size of its kind in Jor Bagh, outside the ASI’s limitations and in close proximity to Lodhi Gardens. The apartment faces and has access to a park in the front and the rear providing residents with verdant & serene green views.
                     </Text>
-                    <Text className=" font-playRegular text-[12px] my-8 text-gray-500">
+                    <Text className=" font-playRegular text-[10px] my-8 text-gray-500">
                         This recently built 275 sqm (~2,960 sq. ft.) apartment has a beautiful living room with... <Text className=" text-black font-rreg underline">Read More</Text>
                     </Text>
                 </View>
@@ -110,44 +162,50 @@ const ListingDetail = () => {
                 <View className="px-8 mt-5 pb-5 border-b-gray-200 border-b-[6px]">
                     <TouchableOpacity onPress={() => setOption(!option)}>
                         <View className="flex-row items-center justify-between">
-                            <Image source={detail1} className="w-10 h-10" resizeMode='contain'></Image>
-                            <View className="ml-[-45px]">
-                                <Text className="text-base mb-2">Financing Options</Text>
-                                <Text className="text-[10px] text-gray-500">Options for both Owners and Shareholders</Text>
+                            <View className="flex-row items-center gap-4">
+                                <Image source={detail1} className="w-8 h-8" resizeMode='contain' />
+                                <View className="">
+                                    <Text className="text-[12px] mb-1">Financing Options</Text>
+                                    <Text className="text-[8px] text-gray-500">Options for both Owners and Shareholders</Text>
+                                </View>
                             </View>
-                            <Image source={!option ? down : up} className="w-[12px] h-[12px]" resizeMode='contain'></Image>
+                            <Image source={!option ? down : up} className="w-[12px] h-[12px]" resizeMode='contain' />
                         </View>
                     </TouchableOpacity>
-                    {option && (
-                        <View>
-                            <View className="flex-row justify-between items-center w-[95%] bg-[#F7F7F7] m-auto mt-6 p-4 bottom-[1px] border">
-                                <View>
-                                    <Image source={option1} className="w-6 h-6" resizeMode='contain'></Image>
-                                    <Text className="text-[12px] mt-2 font-rmed">Become a shareholder</Text>
-                                    <Text className="text-[8px] mb-2 ">Own a share of this stunning growth-driven property.</Text>
-                                    <Text className="text-[8px] mb-2 text-gray-400">1 Share (token) = $ 15,293</Text>
+                    <Animated.View style={{ height: heightInterpolate1, overflow: 'hidden' }}>
+                        {option && (
+                            <View>
+                                <View className="flex-row justify-evenly items-center w-[95%] bg-[#F7F7F7] m-auto mt-6 p-4 bottom-[1px] border">
+                                    <View>
+                                        <Image source={option1} className="w-6 h-6" resizeMode='contain' />
+                                        <Text className="text-[12px] mt-2 font-rmed">Become a shareholder</Text>
+                                        <Text className="text-[6px] mb-2">Own a share of this stunning growth-driven property.</Text>
+                                        <Text className="text-[8px] mb-2 text-gray-400">1 Share (token) = $ 15,293</Text>
+                                    </View>
+                                    <View className="items-center justify-center">
+                                        <Text className="text-[10px] text-gray-300">$ 3,058,654</Text>
+                                        <Text className="text-base mb-2 font-rmed">$ 15,293</Text>
+                                    </View>
                                 </View>
-                                <View className="items-center justify-center">
-                                    <Text className="text-xs text-gray-300">$ 3,058,654</Text>
-                                    <Text className="text-xl mb-2 font-rmed">$ 15,293</Text>
+                                <View className="flex-row items-center gap-x-3 p-4">
+                                    <Image source={option2} className="w-6 h-6" resizeMode='contain' />
+                                    <View>
+                                        <Text className="text-[12px] font-rmed">Sotheby’s Financial Services</Text>
+                                        <Text className="text-[7px]">Allow our team of experts to tailor the ideal financing option for you</Text>
+                                    </View>
                                 </View>
                             </View>
-                            <View className="flex-row gap-x-2 p-4">
-                                <Image source={option2} className="w-6 h-6" resizeMode='contain'></Image>
-                                <View>
-                                    <Text className="text-[12px] font-rmed">Sotheby’s Financial Services</Text>
-                                    <Text className="text-[9px]">Allow our team of experts to tailor the ideal financing option for you </Text>
-                                </View>
-                            </View>
-                        </View>
-                    )}
+                        )}
+                    </Animated.View>
                 </View>
 
                 <View className="px-8 mt-5 pb-5 flex-row items-center justify-between border-b-gray-200 border-b-[6px]">
-                    <Image source={detail2} className="w-10 h-10" resizeMode='contain'></Image>
-                    <View className="ml-[-10px]">
-                        <Text className="text-base mb-2">Property Details</Text>
-                        <Text className="text-[10px] text-gray-500">Flat type, square footage, location benefits, ame...</Text>
+                    <View className="flex-row items-center gap-4">
+                        <Image source={detail2} className="w-8 h-8" resizeMode='contain'></Image>
+                        <View>
+                            <Text className="text-[12px] mb-1">Property Details</Text>
+                            <Text className="text-[8px] text-gray-500">Flat type, square footage, location benefits, ame...</Text>
+                        </View>
                     </View>
                     <Image source={down} className="w-[12px] h-[12px]" resizeMode='contain'></Image>
                 </View>
@@ -155,47 +213,55 @@ const ListingDetail = () => {
                 <View className="px-8 mt-5 pb-5">
                     <TouchableOpacity onPress={() => setModel(!model)}>
                         <View className="flex-row items-center justify-between">
-
-                            <Image source={detail3} className="w-10 h-10" resizeMode='contain'></Image>
-                            <View>
-                                <Text className="text-base mb-2">Financial Model</Text>
-                                <Text className="text-[10px] text-gray-500">Indicators for capital appreciation, monthly yield etc.</Text>
+                            <View className="flex-row items-center gap-4">
+                                <Image source={detail3} className="w-8 h-8" resizeMode='contain' />
+                                <View>
+                                    <Text className="text-[12px] mb-1">Financial Model</Text>
+                                    <Text className="text-[8px] text-gray-500">Indicators for capital appreciation, monthly yield etc.</Text>
+                                </View>
                             </View>
-                            <Image source={!model ? down : up} className="w-[12px] h-[12px]" resizeMode='contain'></Image>
+                            <Image source={!model ? down : up} className="w-[12px] h-[12px]" resizeMode='contain' />
                         </View>
                     </TouchableOpacity>
-                    {model && (
-                        <TouchableOpacity onPress={() => setJoin(true)}>
-                            <View className="justify-center relative items-center">
-                                {!join && (<CustomButton
-                                    title="CONFIRM SPOT"
-                                    icon2={arrow}
-                                    containerStyle="bg-[#121212] ml-[120px] w-full m-auto mt-6 min-h-[45px]"
-                                    textStyle="font-rreg text-white text-xl"
-                                />
-                                )}
-                                <Image source={slip} resizeMode='contain' className="w-[300px] h-[300px] mt-6"></Image>
-                                {join && (
-                                    <View className=" pointer-events-none absolute bg-[#00172A] p-6">
-                                        <Text className="text-white mb-4 font-playRegular text-xl">Join Us</Text>
-                                        <Text className="text-white mb-4 text-[10px]">Learn more about this property and gain access to a wide pool of financing options - ones that could flair up not just your passion, but even your portfolio. </Text>
+                    <Animated.View style={{ height: heightInterpolate2, overflow: 'hidden' }}>
+                        {model && (
+                            <TouchableOpacity onPress={() => setJoin(true)}>
+                                <View className="justify-center relative items-center">
+                                    {!join && (
                                         <CustomButton
-                                            title="Sign Up"
-                                            containerStyle="bg-white ml-[120px] w-[165px] min-h-[45px]"
-                                            textStyle="font-playRegular text-xl"
+                                            title="CONFIRM SPOT"
+                                            icon2={arrow}
+                                            containerStyle="bg-[#121212] ml-[120px] w-full m-auto mt-6 min-h-[45px]"
+                                            textStyle="font-rreg text-white text-xl"
                                         />
-                                    </View>
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                    )}
+                                    )}
+                                    <Image source={slip} resizeMode='contain' className="w-[300px] h-[300px] mt-6" />
+                                    {join && (
+                                        <View className="pointer-events-none absolute bg-[#00172A] p-6">
+                                            <Text className="text-white mb-4 font-playRegular text-xl">Join Us</Text>
+                                            <Text className="text-white mb-4 text-[10px]">
+                                                Learn more about this property and gain access to a wide pool of financing options - ones that could flair up not just your passion, but even your portfolio.
+                                            </Text>
+                                            <CustomButton
+                                                title="Sign Up"
+                                                containerStyle="bg-white ml-[120px] w-[165px] min-h-[45px]"
+                                                textStyle="font-playRegular text-xl"
+                                            />
+                                        </View>
+                                    )}
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </Animated.View>
                 </View>
 
                 {!join && (<View className="px-4 mt-5 py-5 flex-row items-center justify-between bg-[#00172A]">
-                    <Image source={profile} className="w-14 h-14" resizeMode='contain'></Image>
-                    <View>
-                        <Text className="text-white text-base mb-2 ">Akash Puri</Text>
-                        <Text className="text-white text-[9px] ">Seek guidance and an expert opinion from our specialists.</Text>
+                    <View className="flex-row items-center gap-4">
+                        <Image source={profile} className="w-12 h-12" resizeMode='contain'></Image>
+                        <View>
+                            <Text className="text-white text-[13px] mb-1 ">Akash Puri</Text>
+                            <Text className="text-white text-[8px] ">Seek guidance and an expert opinion from our specialists.</Text>
+                        </View>
                     </View>
                     <Image source={arrow} className="w-10 h-10" resizeMode='contain'></Image>
                 </View>

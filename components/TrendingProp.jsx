@@ -24,7 +24,7 @@ const TrendingProp = ({ dataset }) => {
                             <View className="flex-row items-center py-3 gap-2">
                                 <Text className="text-white font-rreg text-[10px]">{item.area}</Text>
                                 <Text className="text-white">.</Text>
-                                <Text className="text-white font-rreg text-[10px]">{item.extra}</Text>
+                                <Text className="text-white  font-rreg text-[10px]">{item.extra}</Text>
                             </View>
 
                             <View className="flex-row justify-between w-[320px]">
@@ -33,21 +33,21 @@ const TrendingProp = ({ dataset }) => {
                                         title="Fractional Investment Available "
                                         icon={tick}
                                         containerStyle="bg-[#FFFFFF80] w-[165px] min-h-[35px] text-white"
-                                        textStyle="font-rreg text-white text-[9px]"
+                                        textStyle="font-rreg text-white text-[8px]"
                                     />
                                 ) : (
                                     <CustomButton
                                         title="Fractional Investment Unavailable "
                                         icon={cross}
                                         containerStyle="bg-[#FFFFFF80] w-[170px] min-h-[35px] text-white"
-                                        textStyle="font-rreg text-white text-[9px]"
+                                        textStyle="font-rreg text-white text-[8px]"
                                     />
                                 )}
                                 <CustomButton
                                     title={item.reg}
                                     icon={exit}
-                                    containerStyle="bg-white  w-[135px] min-h-[35px]text-white"
-                                    textStyle="font-rreg text-[9px]"
+                                    containerStyle="bg-white w-[135px] min-h-[35px]text-white"
+                                    textStyle="font-rreg text-[8px]"
                                 />
                             </View>
                         </View>
