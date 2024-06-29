@@ -1,6 +1,7 @@
-# Welcome to your Expo app 👋
+# Screen
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![realestate](https://github.com/sauravsilawat/Roobafinance_app/assets/96677760/3184a85b-201c-4547-9e5c-16d79c0c38fa)
+
 
 ## Get started
 
